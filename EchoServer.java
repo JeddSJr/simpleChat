@@ -55,10 +55,11 @@ public class EchoServer extends AbstractServer
   public void handleMessageFromClient
     (Object msg, ConnectionToClient client)
   {
-    System.out.println("Message received: " + msg + " from " + client);
+    System.out.println("Message received: " + msg + " from " + client.getInfo("id"));
     if(((String)msg).startsWith("#login ") && client.getInfo("id") == null){
         int loginid = Integer.parseInt(((String)msg).replaceAll("#login ", ""));
         client.setInfo("id", loginid);
+        sendToAllClients(client.getInfo("id")+ " est connecte.");
     }
     else if (((String)msg).startsWith("#login ") && client.getInfo("id") != null) {
       try {
@@ -180,8 +181,8 @@ public class EchoServer extends AbstractServer
       port = DEFAULT_PORT; //Set port to 5555
     }
 
-    ChatIF serverUI= new ServerConsole(port);
-    EchoServer sv = new EchoServer(port, serverUI);
+
+    EchoServer sv = new EchoServer(port, null);
 
     try
     {
@@ -189,7 +190,9 @@ public class EchoServer extends AbstractServer
     }
     catch (Exception ex)
     {
+      ex.printStackTrace();
       System.out.println("ERROR - Could not listen for clients!");
+      System.exit(0);
     }
   }
 }

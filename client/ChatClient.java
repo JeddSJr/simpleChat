@@ -70,6 +70,10 @@ public class ChatClient extends AbstractClient
     if(((String)msg).equals("SERVER MSG #quit")){
       connectionClosed();
     }
+    if(((String)msg).equals("SERVER MSG #close")){
+      System.out.println("Serveur ferme, deconnexion.");
+
+    }
   }
 
   /**
@@ -92,7 +96,7 @@ public class ChatClient extends AbstractClient
             break;
           case("#login"):
             if(this.isConnected()==false){
-              sendToServer("#login "+idLogin);
+              this.openConnection();
             }
             else{
               System.out.println("Erreur: Vous etes deja connecte.");
